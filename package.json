@@ -1,0 +1,143 @@
+{
+	"name": "zotero-annotations-count",
+	"version": "0.0.1",
+	"description": "Add a column showing how many annotations each of your Zotero items has.",
+	"config": {
+		"addonName": "Zotero Annotations Count",
+		"addonID": "zotero-annotations-count@hotmail.com",
+		"addonRef": "zotero-annotations-count",
+		"addonInstance": "ZoteroAnnotationsCount",
+		"prefsPrefix": "extensions.zotero.zotero-annotations-count",
+		"releasePage": "https://github.com/Dominic-DallOsto/zotero-annotations-count/releases",
+		"updateJSON": "https://github.com/Dominic-DallOsto/zotero-annotations-count/releases/latest/download/update.json"
+	},
+	"main": "src/index.ts",
+	"scripts": {
+		"start": "zotero-plugin serve",
+		"build": "tsc --noEmit && zotero-plugin build",
+		"stop": "node scripts/stop.mjs",
+		"lint": "prettier --write . && eslint . --ext .ts --fix",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"release": "release-it --only-version --preReleaseId=beta",
+		"update-deps": "npm update --save"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Dominic-DallOsto/zotero-annotations-count.git"
+	},
+	"author": "Dominic Dall'Osto",
+	"license": "AGPL-3.0-or-later",
+	"bugs": {
+		"url": "https://github.com/Dominic-DallOsto/zotero-annotations-count/issues"
+	},
+	"homepage": "https://github.com/Dominic-DallOsto/zotero-annotations-count",
+	"dependencies": {
+		"zotero-plugin-toolkit": "^2.3.37"
+	},
+	"devDependencies": {
+		"@types/node": "^20.10.4",
+		"@typescript-eslint/eslint-plugin": "^7.0.2",
+		"@typescript-eslint/parser": "^7.0.2",
+		"chokidar": "^3.6.0",
+		"compressing": "^1.10.0",
+		"esbuild": "^0.20.1",
+		"eslint": "^8.55.0",
+		"eslint-config-prettier": "^9.1.0",
+		"prettier": "^3.1.1",
+		"release-it": "^17.0.1",
+		"replace-in-file": "^7.0.2",
+		"typescript": "^5.3.3",
+		"zotero-plugin-scaffold": "^0.0.33",
+		"zotero-types": "^2.1.0"
+	},
+	"eslintConfig": {
+		"env": {
+			"browser": true,
+			"es2021": true
+		},
+		"root": true,
+		"extends": [
+			"eslint:recommended",
+			"plugin:@typescript-eslint/recommended",
+			"plugin:@typescript-eslint/eslint-recommended",
+			"plugin:@typescript-eslint/recommended-requiring-type-checking",
+			"prettier"
+		],
+		"overrides": [],
+		"parser": "@typescript-eslint/parser",
+		"parserOptions": {
+			"ecmaVersion": "latest",
+			"sourceType": "module",
+			"project": [
+				"tsconfig.json"
+			]
+		},
+		"plugins": [
+			"@typescript-eslint"
+		],
+		"rules": {
+			"@typescript-eslint/ban-ts-comment": [
+				"warn",
+				{
+					"ts-expect-error": "allow-with-description",
+					"ts-ignore": "allow-with-description",
+					"ts-nocheck": "allow-with-description",
+					"ts-check": "allow-with-description"
+				}
+			],
+			"@typescript-eslint/no-unused-vars": "off",
+			"@typescript-eslint/no-explicit-any": [
+				"off",
+				{
+					"ignoreRestArgs": true
+				}
+			],
+			"@typescript-eslint/no-non-null-assertion": "off"
+		},
+		"ignorePatterns": [
+			"**/build/**",
+			"**/logs/**",
+			"**/dist/**",
+			"**/node_modules/**",
+			"**/scripts/**",
+			"**/*.js",
+			"**/*.bak",
+			"zotero-plugin.config.ts"
+		]
+	},
+	"prettier": {
+		"printWidth": 80,
+		"useTabs": true,
+		"tabWidth": 4,
+		"endOfLine": "lf",
+		"overrides": [
+			{
+				"files": [
+					"*.xhtml"
+				],
+				"options": {
+					"htmlWhitespaceSensitivity": "css"
+				}
+			}
+		]
+	},
+	"release-it": {
+		"git": {
+			"tagName": "v${version}"
+		},
+		"npm": {
+			"publish": false
+		},
+		"github": {
+			"release": false,
+			"assets": [
+				"build/*.xpi",
+				"build/update*.json"
+			]
+		},
+		"hooks": {
+			"before:init": "npm run lint",
+			"after:bump": "npm run build"
+		}
+	}
+}
