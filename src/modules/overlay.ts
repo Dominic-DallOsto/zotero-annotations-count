@@ -102,7 +102,7 @@ export default class ZoteroAnnotationsCount {
 		const prefOptions = {
 			pluginID: config.addonID,
 			src: rootURI + "chrome/content/preferences.xhtml",
-			label: getString("extension-title"),
+			label: getString("pref-title"),
 			image: `chrome://${config.addonRef}/content/icons/favicon.png`,
 			defaultXUL: true,
 		};
