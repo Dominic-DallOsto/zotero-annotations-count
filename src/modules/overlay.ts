@@ -9,6 +9,7 @@ import {
 const ANNOTATIONS_COUNT_COLUMN_ID = "annotationscount";
 const ANNOTATIONS_COUNT_COLUMN_FORMAT_SHOW_ICON_PREF =
 	"annotationscount-show-icon";
+const DONT_SHOW_ZERO_COUNTS_PREF = "annotationscount-hide-zeros";
 
 export default class ZoteroAnnotationsCount {
 	annotationsCountColumnId?: string | false;
@@ -32,6 +33,10 @@ export default class ZoteroAnnotationsCount {
 			ANNOTATIONS_COUNT_COLUMN_FORMAT_SHOW_ICON_PREF,
 			false,
 		);
+		initialiseDefaultPref(
+			ANNOTATIONS_COUNT_COLUMN_FORMAT_SHOW_ICON_PREF,
+			false,
+		);
 	}
 
 	async addAnnotationsCountColumn() {
@@ -47,7 +52,7 @@ export default class ZoteroAnnotationsCount {
 				label: getString("annotations-column-name"),
 				pluginID: config.addonID,
 				dataProvider: (item: Zotero.Item, dataKey: string) => {
-					return this.formatAnnotationsCounts(
+					return this.formatAnnotationsCount(
 						this.getItemAnnotationsCount(item),
 					);
 				},
@@ -76,8 +81,12 @@ export default class ZoteroAnnotationsCount {
 		);
 	}
 
-	formatAnnotationsCounts(count: number) {
-		return count != -1 ? count.toString() : "";
+	formatAnnotationsCount(count: number) {
+		if (getPref(DONT_SHOW_ZERO_COUNTS_PREF)) {
+			return count > 0 ? count.toString() : "";
+		} else {
+			return count != -1 ? count.toString() : "";
+		}
 	}
 
 	getItemAnnotationsCount(item: Zotero.Item) {
@@ -119,6 +128,14 @@ export default class ZoteroAnnotationsCount {
 				getPrefGlobalName(
 					ANNOTATIONS_COUNT_COLUMN_FORMAT_SHOW_ICON_PREF,
 				),
+				async (value: boolean) => {
+					await this.removeAnnotationsCountColumn();
+					await this.addAnnotationsCountColumn();
+				},
+				true,
+			),
+			Zotero.Prefs.registerObserver(
+				getPrefGlobalName(DONT_SHOW_ZERO_COUNTS_PREF),
 				async (value: boolean) => {
 					await this.removeAnnotationsCountColumn();
 					await this.addAnnotationsCountColumn();
