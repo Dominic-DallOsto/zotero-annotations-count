@@ -1,5 +1,7 @@
 # Zotero Annotations Count
 
+![downloads](https://img.shields.io/github/downloads/dominic-dallosto/zotero-annotations-count/latest/zotero-annotations-count.xpi?style=flat-square&label=Downloads%20(latest%20version))
+
 An extension for Zotero that shows how many annotations your items have.
 
 ![Example of extension](https://github.com/user-attachments/assets/18699f10-0068-4396-a688-8090c9b639ee)
