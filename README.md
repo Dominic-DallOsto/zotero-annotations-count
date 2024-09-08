@@ -1,6 +1,6 @@
 # Zotero Annotations Count
 
-![downloads](https://img.shields.io/github/downloads/dominic-dallosto/zotero-annotations-count/latest/zotero-annotations-count.xpi?style=flat-square&label=Downloads%20(latest%20version))
+![downloads](<https://img.shields.io/github/downloads/dominic-dallosto/zotero-annotations-count/latest/zotero-annotations-count.xpi?style=flat-square&label=Downloads%20(latest%20version)>)
 
 An extension for Zotero that shows how many annotations your items have.
 
