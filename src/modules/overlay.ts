@@ -52,12 +52,37 @@ export default class ZoteroAnnotationsCount {
 				label: getString("annotations-column-name"),
 				pluginID: config.addonID,
 				dataProvider: (item: Zotero.Item, dataKey: string) => {
-					return this.formatAnnotationsCount(
-						this.getItemAnnotationsCount(item),
+					return this.getItemAnnotationsCount(item).toString();
+				},
+				renderCell: (
+					index: number,
+					data: string,
+					column: { className: string },
+				) => {
+					const cell = this.createSpanElement(
+						`cell ${column.className}`,
+						"",
 					);
+					const text = this.createSpanElement(
+						"cell-text",
+						this.formatAnnotationsCount(data),
+					);
+					cell.append(text);
+
+					return cell;
 				},
 				zoteroPersist: ["width", "hidden", "sortDirection"],
 			});
+	}
+
+	createSpanElement(className: string, innerText: string) {
+		const span = document.createElementNS(
+			"http://www.w3.org/1999/xhtml",
+			"span",
+		);
+		span.className = className;
+		span.innerText = innerText;
+		return span;
 	}
 
 	async removeAnnotationsCountColumn() {
@@ -81,11 +106,20 @@ export default class ZoteroAnnotationsCount {
 		);
 	}
 
-	formatAnnotationsCount(count: number) {
-		if (getPref(DONT_SHOW_ZERO_COUNTS_PREF)) {
-			return count > 0 ? count.toString() : "";
+	/**
+	 * Count is either:
+	 *   -1 -> this is a note or other item that can't have annotations nor attachments, show nothing;
+	 *    0 -> show 0 unless the set not to in preferences;
+	 * else -> show the number
+	 */
+	formatAnnotationsCount(count: string) {
+		if (
+			count == "-1" ||
+			(count == "0" && getPref(DONT_SHOW_ZERO_COUNTS_PREF))
+		) {
+			return "";
 		} else {
-			return count != -1 ? count.toString() : "";
+			return count;
 		}
 	}
 
