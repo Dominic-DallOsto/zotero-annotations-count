@@ -74,6 +74,15 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+            - name: release update.json
+              uses: softprops/action-gh-release@v2
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  tag_name: update
+                  files: build/update*.json
+                  make_latest: false
+
             - name: Notify release
               uses: apexskier/github-release-commenter@v1
               continue-on-error: true

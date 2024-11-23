@@ -149,11 +149,11 @@ export default class ZoteroAnnotationsCount {
 			image: `chrome://${config.addonRef}/content/icons/favicon.png`,
 			defaultXUL: true,
 		};
-		ztoolkit.PreferencePane.register(prefOptions);
+		void Zotero.PreferencePanes.register(prefOptions);
 	}
 
 	removePreferencesMenu() {
-		ztoolkit.PreferencePane.unregister(config.addonID);
+		Zotero.PreferencePanes.unregister(config.addonID);
 	}
 
 	addPreferenceUpdateObservers() {
