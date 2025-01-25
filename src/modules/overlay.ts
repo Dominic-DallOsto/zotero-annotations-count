@@ -17,13 +17,13 @@ export default class ZoteroAnnotationsCount {
 
 	constructor() {
 		this.initialiseDefaultPreferences();
-		void this.addAnnotationsCountColumn();
+		this.addAnnotationsCountColumn();
 		this.addPreferencesMenu();
 		this.addPreferenceUpdateObservers();
 	}
 
 	public unload() {
-		void this.removeAnnotationsCountColumn();
+		this.removeAnnotationsCountColumn();
 		this.removePreferencesMenu();
 		this.removePreferenceUpdateObservers();
 	}
@@ -39,40 +39,37 @@ export default class ZoteroAnnotationsCount {
 		);
 	}
 
-	async addAnnotationsCountColumn() {
-		this.annotationsCountColumnId =
-			await Zotero.ItemTreeManager.registerColumns({
-				dataKey: ANNOTATIONS_COUNT_COLUMN_ID,
-				// If we just want to show the icon, overwrite the label with htmlLabel (#1)
-				htmlLabel: getPref(
-					ANNOTATIONS_COUNT_COLUMN_FORMAT_SHOW_ICON_PREF,
-				)
-					? `<span class="icon icon-css icon-16" style="background: url(chrome://${config.addonRef}/content/icons/favicon.png) content-box no-repeat center/contain;" />`
-					: undefined,
-				label: getString("annotations-column-name"),
-				pluginID: config.addonID,
-				dataProvider: (item: Zotero.Item, dataKey: string) => {
-					return this.getItemAnnotationsCount(item).toString();
-				},
-				renderCell: (
-					index: number,
-					data: string,
-					column: { className: string },
-				) => {
-					const cell = this.createSpanElement(
-						`cell ${column.className}`,
-						"",
-					);
-					const text = this.createSpanElement(
-						"cell-text",
-						this.formatAnnotationsCount(data),
-					);
-					cell.append(text);
+	addAnnotationsCountColumn() {
+		this.annotationsCountColumnId = Zotero.ItemTreeManager.registerColumn({
+			dataKey: ANNOTATIONS_COUNT_COLUMN_ID,
+			// If we just want to show the icon, overwrite the label with htmlLabel (#1)
+			htmlLabel: getPref(ANNOTATIONS_COUNT_COLUMN_FORMAT_SHOW_ICON_PREF)
+				? `<span class="icon icon-css icon-16" style="background: url(chrome://${config.addonRef}/content/icons/favicon.png) content-box no-repeat center/contain;" />`
+				: undefined,
+			label: getString("annotations-column-name"),
+			pluginID: config.addonID,
+			dataProvider: (item: Zotero.Item, dataKey: string) => {
+				return this.getItemAnnotationsCount(item).toString();
+			},
+			renderCell: (
+				index: number,
+				data: string,
+				column: { className: string },
+			) => {
+				const cell = this.createSpanElement(
+					`cell ${column.className}`,
+					"",
+				);
+				const text = this.createSpanElement(
+					"cell-text",
+					this.formatAnnotationsCount(data),
+				);
+				cell.append(text);
 
-					return cell;
-				},
-				zoteroPersist: ["width", "hidden", "sortDirection"],
-			});
+				return cell;
+			},
+			zoteroPersist: ["width", "hidden", "sortDirection"],
+		});
 	}
 
 	createSpanElement(className: string, innerText: string) {
@@ -85,9 +82,9 @@ export default class ZoteroAnnotationsCount {
 		return span;
 	}
 
-	async removeAnnotationsCountColumn() {
+	removeAnnotationsCountColumn() {
 		if (this.annotationsCountColumnId) {
-			await Zotero.ItemTreeManager.unregisterColumns(
+			Zotero.ItemTreeManager.unregisterColumn(
 				this.annotationsCountColumnId,
 			);
 			this.annotationsCountColumnId = undefined;
@@ -163,16 +160,16 @@ export default class ZoteroAnnotationsCount {
 					ANNOTATIONS_COUNT_COLUMN_FORMAT_SHOW_ICON_PREF,
 				),
 				async (value: boolean) => {
-					await this.removeAnnotationsCountColumn();
-					await this.addAnnotationsCountColumn();
+					this.removeAnnotationsCountColumn();
+					this.addAnnotationsCountColumn();
 				},
 				true,
 			),
 			Zotero.Prefs.registerObserver(
 				getPrefGlobalName(DONT_SHOW_ZERO_COUNTS_PREF),
 				async (value: boolean) => {
-					await this.removeAnnotationsCountColumn();
-					await this.addAnnotationsCountColumn();
+					this.removeAnnotationsCountColumn();
+					this.addAnnotationsCountColumn();
 				},
 				true,
 			),
