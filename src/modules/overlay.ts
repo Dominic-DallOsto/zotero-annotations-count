@@ -159,7 +159,7 @@ export default class ZoteroAnnotationsCount {
 				getPrefGlobalName(
 					ANNOTATIONS_COUNT_COLUMN_FORMAT_SHOW_ICON_PREF,
 				),
-				async (value: boolean) => {
+				(value: boolean) => {
 					this.removeAnnotationsCountColumn();
 					this.addAnnotationsCountColumn();
 				},
@@ -167,7 +167,7 @@ export default class ZoteroAnnotationsCount {
 			),
 			Zotero.Prefs.registerObserver(
 				getPrefGlobalName(DONT_SHOW_ZERO_COUNTS_PREF),
-				async (value: boolean) => {
+				(value: boolean) => {
 					this.removeAnnotationsCountColumn();
 					this.addAnnotationsCountColumn();
 				},
