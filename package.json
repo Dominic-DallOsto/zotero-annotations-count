@@ -32,20 +32,20 @@
 	},
 	"homepage": "https://github.com/Dominic-DallOsto/zotero-annotations-count",
 	"dependencies": {
-		"zotero-plugin-toolkit": "^4.0.11"
+		"zotero-plugin-toolkit": "^5.0.1"
 	},
 	"devDependencies": {
-		"@types/node": "^20.10.4",
-		"esbuild": "^0.24.2",
-		"eslint": "^9.19.0",
-		"eslint-config-prettier": "^9.1.0",
-		"prettier": "^3.4.2",
-		"release-it": "^17.10.0",
+		"@types/node": "^24.1.0",
+		"esbuild": "^0.25.8",
+		"eslint": "^9.32.0",
+		"eslint-config-prettier": "^10.1.8",
+		"prettier": "^3.6.2",
+		"release-it": "^19.0.4",
 		"replace-in-file": "^8.3.0",
-		"typescript": "^5.7.3",
-		"typescript-eslint": "^8.21.0",
-		"zotero-plugin-scaffold": "^0.1.7",
-		"zotero-types": "^3.1.6"
+		"typescript": "^5.8.3",
+		"typescript-eslint": "^8.38.0",
+		"zotero-plugin-scaffold": "^0.8.0",
+		"zotero-types": "^4.0.5"
 	},
 	"prettier": {
 		"printWidth": 80,
