@@ -5,6 +5,10 @@ import {
 	initialiseDefaultPref,
 	getPrefGlobalName,
 } from "../utils/prefs";
+import {
+	fixStyleSheetBug,
+	cleanupStyleSheetBugFix,
+} from "../utils/itemTreeStyleSheetBug";
 
 const ANNOTATIONS_COUNT_COLUMN_ID = "annotationscount";
 const ANNOTATIONS_COUNT_COLUMN_FORMAT_SHOW_ICON_PREF =
@@ -16,6 +20,7 @@ export default class ZoteroAnnotationsCount {
 	preferenceUpdateObservers?: symbol[];
 
 	constructor() {
+		void fixStyleSheetBug(config.addonID);
 		this.initialiseDefaultPreferences();
 		this.addAnnotationsCountColumn();
 		this.addPreferencesMenu();
@@ -26,6 +31,7 @@ export default class ZoteroAnnotationsCount {
 		this.removeAnnotationsCountColumn();
 		this.removePreferencesMenu();
 		this.removePreferenceUpdateObservers();
+		cleanupStyleSheetBugFix(config.addonID);
 	}
 
 	initialiseDefaultPreferences() {
