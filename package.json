@@ -9,7 +9,7 @@
 		"addonInstance": "ZoteroAnnotationsCount",
 		"prefsPrefix": "extensions.zotero.zotero-annotations-count",
 		"releasePage": "https://github.com/Dominic-DallOsto/zotero-annotations-count/releases",
-		"updateJSON": "https://github.com/Dominic-DallOsto/zotero-annotations-count/releases/latest/download/update.json"
+		"updateJSON": "https://github.com/Dominic-DallOsto/zotero-annotations-count/releases/download/update/update.json"
 	},
 	"main": "src/index.ts",
 	"scripts": {
