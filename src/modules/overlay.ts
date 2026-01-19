@@ -5,10 +5,6 @@ import {
 	initialiseDefaultPref,
 	getPrefGlobalName,
 } from "../utils/prefs";
-import {
-	fixStyleSheetBug,
-	cleanupStyleSheetBugFix,
-} from "../utils/itemTreeStyleSheetBug";
 
 const ANNOTATIONS_COUNT_COLUMN_ID = "annotationscount";
 const ANNOTATIONS_COUNT_COLUMN_FORMAT_SHOW_ICON_PREF =
@@ -20,7 +16,6 @@ export default class ZoteroAnnotationsCount {
 	preferenceUpdateObservers?: symbol[];
 
 	constructor() {
-		void fixStyleSheetBug(config.addonID);
 		this.initialiseDefaultPreferences();
 		this.addAnnotationsCountColumn();
 		this.addPreferencesMenu();
@@ -31,7 +26,6 @@ export default class ZoteroAnnotationsCount {
 		this.removeAnnotationsCountColumn();
 		this.removePreferencesMenu();
 		this.removePreferenceUpdateObservers();
-		cleanupStyleSheetBugFix(config.addonID);
 	}
 
 	initialiseDefaultPreferences() {
@@ -47,13 +41,13 @@ export default class ZoteroAnnotationsCount {
 
 	addAnnotationsCountColumn() {
 		this.annotationsCountColumnId = Zotero.ItemTreeManager.registerColumn({
-			dataKey: ANNOTATIONS_COUNT_COLUMN_ID,
+			dataKey: `${config.addonID.replaceAll("-", "_").replaceAll("@", "_at_").replaceAll(".", "_")}_${ANNOTATIONS_COUNT_COLUMN_ID}`,
 			// If we just want to show the icon, overwrite the label with htmlLabel (#1)
 			htmlLabel: getPref(ANNOTATIONS_COUNT_COLUMN_FORMAT_SHOW_ICON_PREF)
 				? `<span class="icon icon-css icon-16" style="background: url(chrome://${config.addonRef}/content/icons/favicon.png) content-box no-repeat center/contain;" />`
 				: undefined,
 			label: getString("annotations-column-name"),
-			pluginID: config.addonID,
+			pluginID: "",
 			dataProvider: (item: Zotero.Item, dataKey: string) => {
 				return this.getItemAnnotationsCount(item).toString();
 			},
