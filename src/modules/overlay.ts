@@ -42,12 +42,13 @@ export default class ZoteroAnnotationsCount {
 	addAnnotationsCountColumn() {
 		this.annotationsCountColumnId = Zotero.ItemTreeManager.registerColumn({
 			dataKey: `${config.addonID.replaceAll("-", "_").replaceAll("@", "_at_").replaceAll(".", "_")}_${ANNOTATIONS_COUNT_COLUMN_ID}`,
-			// If we just want to show the icon, overwrite the label with htmlLabel (#1)
-			htmlLabel: getPref(ANNOTATIONS_COUNT_COLUMN_FORMAT_SHOW_ICON_PREF)
-				? `<span class="icon icon-css icon-16" style="background: url(chrome://${config.addonRef}/content/icons/favicon.png) content-box no-repeat center/contain;" />`
+			iconPath: getPref(ANNOTATIONS_COUNT_COLUMN_FORMAT_SHOW_ICON_PREF)
+				? `chrome://${config.addonRef}/content/icons/favicon.png`
 				: undefined,
 			label: getString("annotations-column-name"),
-			pluginID: "",
+			pluginID: config.addonID,
+			minWidth: 26,
+			staticWidth: true,
 			dataProvider: (item: Zotero.Item, dataKey: string) => {
 				return this.getItemAnnotationsCount(item).toString();
 			},
@@ -60,6 +61,7 @@ export default class ZoteroAnnotationsCount {
 					`cell ${column.className}`,
 					"",
 				);
+				cell.style.textAlign = "center";
 				const text = this.createSpanElement(
 					"cell-text",
 					this.formatAnnotationsCount(data),
