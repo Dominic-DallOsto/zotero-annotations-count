@@ -14,18 +14,21 @@ const DONT_SHOW_ZERO_COUNTS_PREF = "annotationscount-hide-zeros";
 export default class ZoteroAnnotationsCount {
 	annotationsCountColumnId?: string | false;
 	preferenceUpdateObservers?: symbol[];
+	itemUpdateObserver?: string;
 
 	constructor() {
 		this.initialiseDefaultPreferences();
 		this.addAnnotationsCountColumn();
 		this.addPreferencesMenu();
 		this.addPreferenceUpdateObservers();
+		this.addItemUpdateObserver();
 	}
 
 	public unload() {
 		this.removeAnnotationsCountColumn();
 		this.removePreferencesMenu();
 		this.removePreferenceUpdateObservers();
+		this.removeItemUpdateObserver();
 	}
 
 	initialiseDefaultPreferences() {
@@ -186,6 +189,66 @@ export default class ZoteroAnnotationsCount {
 				Zotero.Prefs.unregisterObserver(preferenceUpdateObserverSymbol);
 			}
 			this.preferenceUpdateObservers = undefined;
+		}
+	}
+
+	refreshItemsView() {
+		type ItemsViewLike = {
+			refreshAndMaintainSelection?: () => unknown;
+			tree?: {
+				invalidate?: () => void;
+			};
+		};
+
+		const itemsView = (ZoteroPane as { itemsView?: ItemsViewLike })
+			.itemsView;
+		if (!itemsView) {
+			return;
+		}
+
+		if (typeof itemsView.refreshAndMaintainSelection === "function") {
+			void itemsView.refreshAndMaintainSelection();
+			return;
+		}
+
+		if (typeof itemsView?.tree?.invalidate === "function") {
+			itemsView.tree.invalidate();
+		}
+	}
+
+	addItemUpdateObserver() {
+		this.itemUpdateObserver = Zotero.Notifier.registerObserver(
+			{
+				notify: (
+					event: string,
+					type: string,
+					ids: Array<number | string>,
+					_extraData: Record<string, unknown>,
+				) => {
+					if (
+						type !== "item" ||
+						!["add", "modify", "delete", "trash"].includes(event)
+					) {
+						return;
+					}
+
+					// Annotation changes are also item events in Zotero.
+					// Refresh the items table so the parent item's aggregated
+					// annotation count stays in sync automatically.
+					if (ids.length) {
+						this.refreshItemsView();
+					}
+				},
+			},
+			["item"],
+			config.addonID,
+		);
+	}
+
+	removeItemUpdateObserver() {
+		if (this.itemUpdateObserver !== undefined) {
+			Zotero.Notifier.unregisterObserver(this.itemUpdateObserver);
+			this.itemUpdateObserver = undefined;
 		}
 	}
 }
