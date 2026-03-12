@@ -61,7 +61,8 @@ export default class ZoteroAnnotationsCount {
 					`cell ${column.className}`,
 					"",
 				);
-				cell.style.textAlign = "center";
+				cell.style.display = "flex";
+				cell.style.justifyContent = "center";
 				const text = this.createSpanElement(
 					"cell-text",
 					this.formatAnnotationsCount(data),
