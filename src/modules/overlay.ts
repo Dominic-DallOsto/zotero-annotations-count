@@ -225,12 +225,12 @@ export default class ZoteroAnnotationsCount {
 					ids: Array<number | string>,
 					_extraData: Record<string, unknown>,
 				) => {
-						if (
-							type !== "item" ||
-							!["add", "delete", "trash"].includes(event)
-						) {
-							return;
-						}
+					if (
+						type !== "item" ||
+						!["add", "delete", "trash"].includes(event)
+					) {
+						return;
+					}
 
 					// Annotation changes are also item events in Zotero.
 					// Refresh the items table so the parent item's aggregated
