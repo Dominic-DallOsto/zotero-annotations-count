@@ -104,7 +104,9 @@ export default class ZoteroAnnotationsCount {
 		// item.isPDFAttachment() && item.getAnnotations().some(x => x.annotationType != 'ink');
 		return (
 			item.isPDFAttachment() ||
-			((item.isEPUBAttachment() || item.isSnapshotAttachment()) &&
+			((item.isEPUBAttachment() ||
+				item.isSnapshotAttachment() ||
+				item.isFileAttachment()) && // needed to detect standalone HTML snapshots
 				item.getAnnotations().length)
 		);
 	}
