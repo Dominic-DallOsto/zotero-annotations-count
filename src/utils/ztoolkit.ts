@@ -1,7 +1,6 @@
 import {
 	BasicTool,
 	makeHelperTool,
-	MenuManager,
 	ProgressWindowHelper,
 	UITool,
 	unregister,
@@ -24,8 +23,6 @@ function initZToolkit(_ztoolkit: ReturnType<typeof createZToolkit>) {
 		__env__ === "development";
 	_ztoolkit.UI.basicOptions.ui.enableElementDOMLog =
 		__env__ === "development";
-	_ztoolkit.basicOptions.debug.disableDebugBridgePassword =
-		__env__ === "development";
 	_ztoolkit.basicOptions.api.pluginID = config.addonID;
 	_ztoolkit.ProgressWindow.setIconURI(
 		"default",
@@ -35,13 +32,11 @@ function initZToolkit(_ztoolkit: ReturnType<typeof createZToolkit>) {
 
 class MyToolkit extends BasicTool {
 	UI: UITool;
-	Menu: MenuManager;
 	ProgressWindow: typeof ProgressWindowHelper;
 
 	constructor() {
 		super();
 		this.UI = new UITool(this);
-		this.Menu = new MenuManager(this);
 		this.ProgressWindow = makeHelperTool(ProgressWindowHelper, this);
 	}
 
